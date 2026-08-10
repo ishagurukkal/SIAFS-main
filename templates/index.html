@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIAFS | Forensic Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #0a0e14; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .hero-section { padding: 60px 0; background: linear-gradient(180deg, #101620 0%, #0a0e14 100%); border-bottom: 1px solid #1f2937; }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 40px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .upload-box { border: 2px dashed #3a7bd5; border-radius: 15px; padding: 40px; text-align: center; transition: 0.3s; cursor: pointer; position: relative; overflow: hidden; }
+        .upload-box:hover { border-color: #00d2ff; background: rgba(58, 123, 213, 0.05); }
+        .btn-analyze { background: linear-gradient(45deg, #3a7bd5, #00d2ff); border: none; color: white; padding: 12px 40px; border-radius: 30px; font-weight: 600; letter-spacing: 1px; transition: 0.3s; width: 100%; }
+        .btn-analyze:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 210, 255, 0.3); }
+        #imagePreview { max-width: 100%; border-radius: 10px; display: none; margin-top: 20px; border: 1px solid #333; }
+        .scan-anim { display: none; margin-top: 20px; }
+        .loader-line { height: 3px; width: 100%; background: #333; overflow: hidden; border-radius: 10px; }
+        .loader-line::after { content: ''; display: block; height: 100%; width: 50%; background: #00d2ff; animation: loading 2s infinite; }
+        @keyframes loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
+    </style>
+</head>
+<body>
+
+<div class="hero-section text-center">
+    <h1 class="display-4 fw-bold text-white"><i class="fas fa-shield-halved me-3"></i>SIAFS</h1>
+    <p class="lead text-secondary">Secure Image Authentication & Forensic Suite</p>
+</div>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="glass-card">
+                <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small text-uppercase">Analysis Mode</label>
+                        <select name="mode" class="form-select bg-dark text-white border-secondary">
+                            <option value="deepfake">AI-Deepfake Detection</option>
+                            <option value="photoshop">Structural/ELA Forgery</option>
+                        </select>
+                    </div>
+
+                    <div class="upload-box" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt fa-3x mb-3" style="color: #00d2ff;"></i>
+                        <h5>Click or Drag Image Here</h5>
+                        <p class="small text-secondary">Supported: JPG, PNG, WEBP</p>
+                        <input type="file" name="image" id="fileInput" hidden onchange="previewImage(event)" accept="image/*">
+                        <img id="imagePreview" alt="Preview">
+                    </div>
+
+                    <div class="scan-anim" id="scanAnim">
+                        <p class="text-center small mb-1">Analyzing Artifacts...</p>
+                        <div class="loader-line"></div>
+                    </div>
+
+                    <button type="submit" class="btn btn-analyze mt-4">Start Forensic Analysis</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function previewImage(event) {
+        const preview = document.getElementById('imagePreview');
+        const dropZoneIcon = document.querySelector('.upload-box i');
+        const dropZoneText = document.querySelector('.upload-box h5');
+        
+        preview.src = URL.createObjectURL(event.target.files[0]);
+        preview.style.display = "block";
+        dropZoneIcon.style.display = "none";
+        dropZoneText.style.display = "none";
+    }
+
+    document.getElementById('uploadForm').onsubmit = function() {
+        document.getElementById('scanAnim').style.display = 'block';
+    };
+</script>
+
+</body>
+</html>
