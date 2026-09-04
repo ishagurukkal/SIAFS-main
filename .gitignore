@@ -1,0 +1,30 @@
+# Virtual environment
+venv/
+.env/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+
+# Model checkpoints & large weights
+*.pt
+*.pth
+*.h5
+*.ckpt
+*.onnx
+*.pkl
+*.bin
+
+# Datasets & pools
+*.zip
+*.tar.gz
+data/
+dataset/
+*_pool/
+
+temp_predict.jpg
+*.jpg
+*.png

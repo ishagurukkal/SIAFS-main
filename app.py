@@ -64,11 +64,14 @@ def upload():
         cv2.imwrite(map_path, ela_map)
 
     # 3. Store results in Session for the PDF Generator
+    # 3. Store results in Session for the PDF Generator
+    score_percentage = round(float(score) * 100, 2)
+
     session['last_scan'] = {
         'image_path': image_path,
         'mode': mode,
         'result': result,
-        'score': round(float(score) * 100, 2), # Convert to percentage
+        'score': score_percentage,
         'map_path': map_path,
         'filename': filename
     }
@@ -76,12 +79,12 @@ def upload():
     return render_template(
         "result.html",
         result=result,
-        score=score, # Original score for logic
+        score=score_percentage,
         image="static/uploads/" + filename,
         map="static/heatmaps/" + map_filename,
         type=mode
     )
-
+    
 @app.route('/download')
 def download():
     # Retrieve data from the last scan
